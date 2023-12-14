@@ -21,6 +21,22 @@ public class Categoria {
 	@NotBlank(message = "O Atributo Genero é obrigatório!")
 	@Size(min = 5, max = 100, message = "O Atributo Genero deve conter no mínimo 5 e no maximo 100 caractéres")
 	private String genero;
+
+	public Long getId() {
+		return id;
+	}
+
+	public void setId(Long id) {
+		this.id = id;
+	}
+
+	public String getGenero() {
+		return genero;
+	}
+
+	public void setGenero(String genero) {
+		this.genero = genero;
+	}
 	
 	
 
