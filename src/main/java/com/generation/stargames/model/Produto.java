@@ -5,11 +5,14 @@ import java.time.LocalDate;
 
 import org.springframework.format.annotation.DateTimeFormat;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 import jakarta.validation.constraints.DecimalMin;
 import jakarta.validation.constraints.Digits;
@@ -51,6 +54,9 @@ public class Produto {
 	@Size(min = 5, max = 500, message = "O Atributo Foto deve conter no mínimo 5 e no maximo 500 caractéres")
 	private String foto;
 
+	@ManyToOne
+	@JsonIgnoreProperties("produto")
+	private Categoria categoria;
 	
 	public Long getId() {
 		return id;
@@ -106,6 +112,14 @@ public class Produto {
 
 	public void setFoto(String foto) {
 		this.foto = foto;
+	}
+
+	public Categoria getCategoria() {
+		return categoria;
+	}
+
+	public void setCategoria(Categoria categoria) {
+		this.categoria = categoria;
 	}
 
 	

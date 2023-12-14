@@ -19,6 +19,7 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.server.ResponseStatusException;
 
 import com.generation.stargames.model.Produto;
+import com.generation.stargames.repository.CategoriaRepository;
 import com.generation.stargames.repository.ProdutoRepository;
 
 @RestController
@@ -29,11 +30,14 @@ public class ProdutoController {
 	@Autowired
 	private ProdutoRepository produtoRepository;
 
+	@Autowired
+	private CategoriaRepository categoriaRepository;
+
 	@GetMapping
 	public ResponseEntity<List<Produto>> getAll() {
 		return ResponseEntity.ok(produtoRepository.findAll());
 	}
-	
+
 	@GetMapping("/{id}")
 	public ResponseEntity<Produto> getById(@PathVariable Long id) {
 		return produtoRepository.findById(id).map(resultado -> ResponseEntity.ok(resultado))
@@ -47,13 +51,20 @@ public class ProdutoController {
 
 	@PostMapping
 	public ResponseEntity<Produto> post(@RequestBody Produto produto) {
-		return ResponseEntity.status(HttpStatus.OK).body(produtoRepository.save(produto));
+		if (categoriaRepository.existsById(produto.getCategoria().getId()))
+			return ResponseEntity.status(HttpStatus.OK).body(produtoRepository.save(produto));
+
+		throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Categoria não existe.", null);
 	}
 
 	@PutMapping
 	public ResponseEntity<Produto> put(@RequestBody Produto produto) {
 		if (produtoRepository.existsById(produto.getId()))
-			return ResponseEntity.status(HttpStatus.OK).body(produtoRepository.save(produto));
+			if (categoriaRepository.existsById(produto.getCategoria().getId()))
+				return ResponseEntity.status(HttpStatus.OK).body(produtoRepository.save(produto));
+			else
+				throw new ResponseStatusException(HttpStatus.BAD_REQUEST);
+
 		else
 			throw new ResponseStatusException(HttpStatus.NOT_FOUND);
 	}
