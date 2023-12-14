@@ -1,5 +1,6 @@
 package com.generation.stargames.controller;
 
+import java.math.BigDecimal;
 import java.util.List;
 import java.util.Optional;
 
@@ -49,6 +50,15 @@ public class ProdutoController {
 		return ResponseEntity.ok(produtoRepository.findAllByNomeContainingIgnoreCase(nome));
 	}
 
+	@GetMapping("/precomaior/{preco}")
+	public ResponseEntity<List<Produto>> getByMaior(@PathVariable BigDecimal preco) {
+		return ResponseEntity.ok(produtoRepository.findByPrecoGreaterThan(preco));
+	}
+	@GetMapping("/precomenor/{preco}")
+	public ResponseEntity<List<Produto>> getByMenor(@PathVariable BigDecimal preco) {
+		return ResponseEntity.ok(produtoRepository.findByPrecoLessThan(preco));
+	}
+	
 	@PostMapping
 	public ResponseEntity<Produto> post(@RequestBody Produto produto) {
 		if (categoriaRepository.existsById(produto.getCategoria().getId()))
