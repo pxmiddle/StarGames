@@ -22,6 +22,7 @@ import org.springframework.web.server.ResponseStatusException;
 import com.generation.stargames.model.Produto;
 import com.generation.stargames.repository.CategoriaRepository;
 import com.generation.stargames.repository.ProdutoRepository;
+import com.generation.stargames.service.ProdutoService;
 
 @RestController
 @RequestMapping("/produtos")
@@ -33,7 +34,10 @@ public class ProdutoController {
 
 	@Autowired
 	private CategoriaRepository categoriaRepository;
-
+	
+	@Autowired
+	private ProdutoService produtoService;
+	
 	@GetMapping
 	public ResponseEntity<List<Produto>> getAll() {
 		return ResponseEntity.ok(produtoRepository.findAll());
@@ -66,6 +70,14 @@ public class ProdutoController {
 
 		throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Categoria não existe.", null);
 	}
+	
+	@PutMapping("/curtir/{id}")
+	public ResponseEntity<Produto> curtir(@PathVariable Long id){
+		return produtoService.curtir(id)
+				.map(resposta -> ResponseEntity.ok(resposta))
+				.orElse(ResponseEntity.badRequest().build());
+	}
+	
 
 	@PutMapping
 	public ResponseEntity<Produto> put(@RequestBody Produto produto) {

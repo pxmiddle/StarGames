@@ -53,7 +53,11 @@ public class Produto {
 	@NotBlank(message = "O Atributo Foto é obrigatório!")
 	@Size(min = 5, max = 500, message = "O Atributo Foto deve conter no mínimo 5 e no maximo 500 caractéres")
 	private String foto;
-
+	
+	@Column(columnDefinition = "integer default 0")
+	private int curtir;
+	
+	
 	@ManyToOne
 	@JsonIgnoreProperties("produto")
 	private Categoria categoria;
@@ -116,6 +120,23 @@ public class Produto {
 
 	public void setFoto(String foto) {
 		this.foto = foto;
+	}
+	
+
+	public int getCurtir() {
+		return curtir;
+	}
+
+	public void setCurtir(int curtir) {
+		this.curtir = curtir;
+	}
+
+	public Usuario getUsuario() {
+		return usuario;
+	}
+
+	public void setUsuario(Usuario usuario) {
+		this.usuario = usuario;
 	}
 
 	public Categoria getCategoria() {
